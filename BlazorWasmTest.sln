@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWasmTest", "BlazorWasmTest\BlazorWasmTest.csproj", "{1E869803-EFA8-42BD-9CE5-55A7932E63B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApiHelper", "WeatherApiHelper\WeatherApiHelper.csproj", "{E0B28B1A-3717-45FD-9CC7-7F066DD45EE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E869803-EFA8-42BD-9CE5-55A7932E63B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E869803-EFA8-42BD-9CE5-55A7932E63B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E869803-EFA8-42BD-9CE5-55A7932E63B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E869803-EFA8-42BD-9CE5-55A7932E63B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B28B1A-3717-45FD-9CC7-7F066DD45EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B28B1A-3717-45FD-9CC7-7F066DD45EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B28B1A-3717-45FD-9CC7-7F066DD45EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B28B1A-3717-45FD-9CC7-7F066DD45EE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA0CEC4D-D5D8-4201-8237-320E03F4F220}
+	EndGlobalSection
+EndGlobal

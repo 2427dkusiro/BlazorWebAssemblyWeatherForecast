@@ -1,0 +1,146 @@
+﻿@page "/weather"
+@inject HttpClient Http
+
+<h1>天気予報</h1>
+
+<p>このページでは、天気予報を表示するデモが体験できます。</p>
+<hr />
+
+<h2>予報地点をさがす</h2>
+
+<div style="margin-left:12px">
+    <h3>予報地点を検索</h3>
+    <div style="margin-left:12px">
+        <label for="positionName">予報地点名:</label>
+        <input type="text" id="positionName" placeholder="東京" @bind="positionName" />
+        <button @onclick="OnPositionSearched">検索</button>
+        @if (hasError)
+        {
+            <p class="text-danger">地点が見つかりません</p>
+        }
+    </div>
+
+    <h3>候補から選ぶ</h3>
+    <div style="margin-left:12px">
+        <div>
+            <label for="prefSelect">都道府県</label>
+            <select name="prefSelect" id="prefSelect" @bind="selectedPref">
+                <option value="">選択...</option>
+                @if (forecastPositionIndex != null)
+                {
+                    @foreach (var group in forecastPositionIndex.PositionGroups)
+                    {
+                        <option value="@group.GroupName">@group.GroupName</option>
+                    }
+                }
+            </select>
+        </div>
+        <div>
+            @if (!string.IsNullOrEmpty(selectedPref))
+            {
+                <label for="positionSelect">地点</label>
+                <select name="positionSelect" id="positionSelect" @bind="selectedCity">
+                    <option value="">選択...</option>
+                    @if (forecastPositionIndex != null)
+                    {
+                        @foreach (var pos in forecastPositionIndex.PositionGroups.First(x => x.GroupName == selectedPref).ForecastPositions)
+                        {
+                            <option value="@pos.CityName">@pos.CityName</option>
+                        }
+                    }
+                </select>
+                @if (!string.IsNullOrEmpty(selectedCity))
+                {
+                    <button @onclick="OnSelectedCitySearched">表示</button>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@if (forecast == null)
+{
+
+}
+else
+{
+    <hr />
+    <h2>
+        @forecast.Title
+    </h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>お天気</th>
+                <th>最低気温</th>
+                <th>最高気温</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecastData in forecast.Forecasts)
+            {
+                <tr>
+                    <td>@forecastData.Date.ToString("yyyy'年'MM'月'dd'日'")</td>
+                    <td>@forecastData.Telop</td>
+                    <td>@GetTempString(forecastData.Temperature.Min.Celsius)</td>
+                    <td>@GetTempString(forecastData.Temperature.Max.Celsius)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@using WeatherApiHelper;
+@code {
+    private WeatherForecast forecast;
+    private ForecastPositionIndex forecastPositionIndex;
+
+    private string positionName;
+    private bool hasError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stream = await Http.GetStreamAsync("/resources/weatherPoint.xml");
+        var data = ForecastPositionHelper.ParseForecastPositionsXml(stream);
+        forecastPositionIndex = data;
+    }
+
+    private string GetTempString(decimal? temp)
+    {
+        return temp is null ? "---" : $"{temp.ToString()}℃";
+    }
+
+    private async Task OnPositionSearched()
+    {
+        if (string.IsNullOrEmpty(positionName))
+        {
+            hasError = true;
+            return;
+        }
+
+        if (forecastPositionIndex.PositionDictionary.TryGetValue(positionName, out var id))
+        {
+            forecast = await ForecastProvider.FetchForecast(Http, id);
+            hasError = false;
+        }
+        else
+        {
+            hasError = true;
+        }
+    }
+
+    private string selectedPref;
+    private string selectedCity;
+    private async Task OnSelectedCitySearched()
+    {
+        if (string.IsNullOrEmpty(selectedCity))
+        {
+            return;
+        }
+
+        var id = forecastPositionIndex.PositionDictionary[selectedCity];
+        forecast = await ForecastProvider.FetchForecast(Http, id);
+        hasError = false;
+    }
+}
