@@ -99,9 +99,11 @@ else
     private string positionName;
     private bool hasError;
 
+    // const string appDir = @"BlazorWebAssemblyWeatherForecast/";
+
     protected override async Task OnInitializedAsync()
     {
-        var stream = await Http.GetStreamAsync("/resources/weatherPoint.xml");
+        var stream = await Http.GetStreamAsync("resources/weatherPoint.xml");
         var data = ForecastPositionHelper.ParseForecastPositionsXml(stream);
         forecastPositionIndex = data;
     }
